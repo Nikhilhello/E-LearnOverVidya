@@ -42,7 +42,17 @@
 
 ---
 
-##
+## mysql> show tables;                    
++------------------+                      
+| Tables_in_yourdb |                                     
++------------------+                             
+| classroom_c      |                            
+| courses          |                          
+| students         |                    
+| web              |                              
++------------------+                                        
+4 rows in set (0.09 sec)
+
 ![mySQL](https://github.com/user-attachments/assets/885ca161-8250-4222-9bb8-4655e50932db)
 
 
