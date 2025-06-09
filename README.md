@@ -7,7 +7,7 @@
 
 ## 🌐 Live Demo
 
-🔗 **Frontend (Netlify)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)
+🔗 **Frontend (Netlify)(For the demo showcase)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)
 
 > Explore the user dashboard, browse courses, join classrooms, and experience a responsive design.  
 > *(Backend integration requires deployment via Tomcat server — not live in demo.)*
@@ -36,7 +36,7 @@
 - **Frontend**: AngularJS, HTML5, CSS3, JavaScript
 - **Backend**: Java (Servlets), JDBC
 - **Database**: MySQL
-- **Hosting**:Tomcat, Netlify (frontend), 
+- **Hosting**:Tomcat, Netlify (frontend-For the demo showcase)
 
 ---
 
