@@ -8,7 +8,7 @@
 ## 🌐 Live Demo
 
 🔗 **Frontend (Netlify)(For the demo showcase)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)                                                   
-🔗 **Frontend (For Quick detailed overview of the Project)**: (https://nikhilhello.github.io/E-LearnOverVidya/)
+🔗 **Frontend (For Quick detailed overview of the Project)**:[https://nikhilhello.github.io/E-LearnOverVidya/](https://nikhilhello.github.io/E-LearnOverVidya/)
 
 
 > Explore the user dashboard, browse courses, join classrooms, and experience a responsive design.  
