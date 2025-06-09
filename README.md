@@ -7,7 +7,7 @@
 
 ## 🌐 Live Demo
 
-🔗 **Frontend (Netlify)(For the demo showcase)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)
+🔗 **Frontend (Netlify)(For the demo showcase)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)                                                   
 🔗 **Frontend (For Quick detailed overview of the Project)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)
 
 
