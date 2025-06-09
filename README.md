@@ -8,6 +8,8 @@
 ## 🌐 Live Demo
 
 🔗 **Frontend (Netlify)(For the demo showcase)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)
+🔗 **Frontend (For Quick detailed overview of the Project)**: [https://learnovervidya.netlify.app](https://learnovervidya.netlify.app)
+
 
 > Explore the user dashboard, browse courses, join classrooms, and experience a responsive design.  
 > *(Backend integration requires deployment via Tomcat server — not live in demo.)*
@@ -43,5 +45,5 @@
 
 🙋‍♂️ About Developer
 Name: Nikhil K
-📧 Email: [your-email@example.com]
-💼 Portfolio: [your-portfolio-link.com]
+📧 Email: [kuchananikhil2004@gmail.com]
+💼 Portfolio: [https://nikhilkuchana.netlify.app/]
