@@ -43,8 +43,7 @@
 ---
 
 
-🙋‍♂️ About Developer
-Name: Nikhil K
+🙋‍♂️ About Developer                         
+Name: Nikhil K                                  
 📧 Email: [kuchananikhil2004@gmail.com]                                        
-
 💼 Portfolio: [https://nikhilkuchana.netlify.app/]
