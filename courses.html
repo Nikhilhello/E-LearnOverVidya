@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+
+<style>
+/* Hide table headers */
+.course-table thead {
+    display: none;
+}
+
+.course-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: #f9fbfc;
+}
+
+.course-table tbody {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 30px;
+}
+
+.course-table tr {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    min-height: 320px;
+    background: white;
+    border-radius: 20px;
+    padding: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    position: relative;
+}
+
+.course-table tr:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+.course-table td {
+    padding: 12px 20px;
+    border: none;
+    color: #2e3a59;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Thumbnail styling */
+.course-table td:first-child::before {
+    content: "";
+    display: block;
+    background-image: url('https://via.placeholder.com/280x150?text=Course+Thumbnail');
+    background-size: cover;
+    background-position: center;
+    height: 150px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Course name */
+.course-table td:nth-child(2) {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 12px;
+}
+
+/* Add a book icon before the course name */
+.course-table td:nth-child(2)::before {
+    content: "\f02d"; /* Font Awesome book icon unicode ---book---------------------*/
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    margin-right: 8px;
+    color: #4f46e5;
+    font-size: 25px;
+/*    text-align: center;
+    vertical-align: middle;  */
+}
+
+
+
+/* Add/Enroll button */
+.course-table td:last-child {
+    margin-top: auto;
+    padding-bottom: 20px;
+}
+
+.course-table button {
+    background: linear-gradient(to right, #4f46e5, #6366f1);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.course-table button i {
+    font-size: 14px;
+}
+
+.course-table button:hover {
+    background: linear-gradient(to right, #4338ca, #4f46e5);
+    transform: scale(1.05);
+}
+
+/* Empty message */
+.course-table tr.ng-if {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    font-style: italic;
+    color: #999;
+    background: transparent;
+    box-shadow: none;
+}
+</style>
+<style type="text/css">
+.tagline {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #6c757d;
+    opacity: 0;
+    animation: fadeInTagline 1.2s ease forwards;
+}
+
+/* Tagline Animation */
+@keyframes fadeInTagline {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+</style>
+
+</head>
+<body>
+
+<div ng-controller="UserCoursesController">
+    <h2 style="font-size: 35px;">Available Courses</h2>
+    <!-- Courses Table -->
+    <table class="course-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Course Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="course in courses">
+                <td>{{ course.id }}</td>
+                <td>{{ course.name }}</td>
+                <td>
+                    <button ng-click="addCourse(course)">Add</button>
+                </td>
+            </tr>
+            <tr ng-if="courses.length === 0">
+                <td colspan="3">No courses found</td>
+            </tr>
+        </tbody>
+    </table>   
+</div>
+<div class="tagline">🌟 Explore. Enroll. Elevate. - Your Future Starts With the Right Course 🌟</div>
+
+<style>
+    .course-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .course-table th, .course-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .course-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    input.ng-invalid.ng-touched {
+        border: 1px solid red;
+    }
+</style>  
+
+
+
+</body>
+</html>

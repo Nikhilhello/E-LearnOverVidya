@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=0CyNy8O382oN&format=png&color=000000" />
+
+  <title>Feedback - E-LearnOver Vidya</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px 40px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    h1 {
+      text-align: center;
+      color: #004085;
+      margin-bottom: 10px;
+    }
+    p.intro {
+      text-align: center;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+      color: #555;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      color: #0056b3;
+    }
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #0056b3;
+      outline: none;
+    }
+    textarea {
+      min-height: 120px;
+    }
+    button {
+      margin-top: 30px;
+      background-color: #0056b3;
+      color: white;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #003d7a;
+    }
+    .confirmation {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      background-color: #d4edda;
+      color: #155724;
+      font-weight: 600;
+      display: none;
+      text-align: center;
+    }
+    .error {
+      color: #c82333;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>We Value Your Feedback</h1>
+    <p class="intro">Please share your thoughts and suggestions to help us improve E-LearnOver Vidya.</p>
+
+    <form id="feedbackForm" novalidate>
+      <label for="name">Name <span style="color:#c82333">*</span></label>
+      <input type="text" id="name" name="name" placeholder="Your full name" required />
+      <div id="nameError" class="error"></div>
+
+      <label for="email">Email <span style="color:#c82333">*</span></label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required />
+      <div id="emailError" class="error"></div>
+
+      <label for="rating">Rating</label>
+      <select id="rating" name="rating">
+        <option value="">Select a rating</option>
+        <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+        <option value="4">⭐⭐⭐⭐ Good</option>
+        <option value="3">⭐⭐⭐ Average</option>
+        <option value="2">⭐⭐ Below Average</option>
+        <option value="1">⭐ Poor</option>
+      </select>
+
+      <label for="message">Your Feedback <span style="color:#c82333">*</span></label>
+      <textarea id="message" name="message" placeholder="Write your comments here..." required></textarea>
+      <div id="messageError" class="error"></div>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+
+    <div id="confirmation" class="confirmation">
+      Thank you for your feedback! We appreciate your time and effort.
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('feedbackForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const messageInput = document.getElementById('message');
+
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const messageError = document.getElementById('messageError');
+    const confirmation = document.getElementById('confirmation');
+
+    function validateEmail(email) {
+      // Basic email regex
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Reset errors
+      nameError.textContent = '';
+      emailError.textContent = '';
+      messageError.textContent = '';
+      confirmation.style.display = 'none';
+
+      let valid = true;
+
+      if (nameInput.value.trim() === '') {
+        nameError.textContent = 'Name is required.';
+        valid = false;
+      }
+      if (emailInput.value.trim() === '') {
+        emailError.textContent = 'Email is required.';
+        valid = false;
+      } else if (!validateEmail(emailInput.value.trim())) {
+        emailError.textContent = 'Please enter a valid email address.';
+        valid = false;
+      }
+      if (messageInput.value.trim() === '') {
+        messageError.textContent = 'Feedback message is required.';
+        valid = false;
+      }
+
+      if (valid) {
+        // Simulate form submission (e.g., send to server)
+        form.reset();
+        confirmation.style.display = 'block';
+      }
+    });
+  </script>
+
+
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+  }
+
+  .stamp-container {
+    position: fixed;
+    bottom: 80px;
+    right: 80px;
+    width: 90px;    /* size of the container */
+    height: 90px;
+    border-radius: 100%;  /* circular container */
+    background: white;   /* optional */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    animation: fadeInRotate 2s ease-in-out forwards;
+  }
+
+  .stamp-container img {
+    width: 180px;  /* scale image to fit nicely */
+    height: auto;
+    border-radius: 50%; /* make image itself circular */
+    filter: brightness(1); /* darker image */
+  }
+
+  @keyframes fadeInRotate {
+    0% {
+      opacity: 0;
+      transform: rotate(-20deg) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(-15deg) scale(1);  /* final tilt left by 30 degrees */
+    }
+  }
+</style>
+
+<div class="stamp-container">
+  <img src="Stamp__LOV-LearnOverVidya_blue.png" alt="LOV - Learn Over Vidya Stamp">
+</div>
+
+
+</body>
+</html>

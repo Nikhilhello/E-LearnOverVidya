@@ -1,0 +1,262 @@
+<!-- <marquee>--- A small quiz coded by Nikhil ---</marquee>   -->
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/_I14_sXHO8U?si=z_xSizjfCyk3Feeh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</center>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+    <title>Amazon S3 & Cloud Computing Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .quiz-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+        }
+        .question:last-child {
+            border-bottom: none;
+        }
+        .question h3 {
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        #submit-btn:hover {
+            background-color: #218838;
+        }
+        #result {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+            font-size: 22px;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .explanation {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Amazon S3 & Cloud Computing Quiz</h1>
+    <div class="quiz-container">
+        <!-- Amazon S3 Questions -->
+        <div class="question" data-answer="Simple Storage Service">
+            <h3>1. What does S3 stand for in Amazon S3?</h3>
+            <div class="options">
+                <label><input type="radio" name="q1" value="Secure Storage Service"> Secure Storage Service</label>
+                <label><input type="radio" name="q1" value="Simple Storage System"> Simple Storage System</label>
+                <label><input type="radio" name="q1" value="Simple Storage Service"> Simple Storage Service</label>
+                <label><input type="radio" name="q1" value="Secure Storage System"> Secure Storage System</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Simple Storage Service</div>
+        </div>
+        
+        <div class="question" data-answer="Data Durability">
+            <h3>2. Which of the following is a key feature of Amazon S3?</h3>
+            <div class="options">
+                <label><input type="radio" name="q2" value="Data Durability"> Data Durability</label>
+                <label><input type="radio" name="q2" value="Data Analysis"> Data Analysis</label>
+                <label><input type="radio" name="q2" value="Data Transformation"> Data Transformation</label>
+                <label><input type="radio" name="q2" value="Data Replication"> Data Replication</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Data Durability</div>
+        </div>
+
+        <div class="question" data-answer="5 TB">
+            <h3>3. What is the maximum size of a single object that can be stored in Amazon S3?</h3>
+            <div class="options">
+                <label><input type="radio" name="q3" value="1 TB"> 1 TB</label>
+                <label><input type="radio" name="q3" value="2 TB"> 2 TB</label>
+                <label><input type="radio" name="q3" value="5 TB"> 5 TB</label>
+                <label><input type="radio" name="q3" value="10 TB"> 10 TB</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: 5 TB</div>
+        </div>
+
+        <div class="question" data-answer="Bucket">
+            <h3>4. What is the name of the storage container in Amazon S3?</h3>
+            <div class="options">
+                <label><input type="radio" name="q4" value="Folder"> Folder</label>
+                <label><input type="radio" name="q4" value="Object"> Object</label>
+                <label><input type="radio" name="q4" value="Bucket"> Bucket</label>
+                <label><input type="radio" name="q4" value="Container"> Container</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Bucket</div>
+        </div>
+
+        <div class="question" data-answer="AWS Management Console">
+            <h3>5. Which tool is commonly used to manage Amazon S3?</h3>
+            <div class="options">
+                <label><input type="radio" name="q5" value="AWS CLI"> AWS CLI</label>
+                <label><input type="radio" name="q5" value="AWS SDK"> AWS SDK</label>
+                <label><input type="radio" name="q5" value="AWS Management Console"> AWS Management Console</label>
+                <label><input type="radio" name="q5" value="Amazon RDS"> Amazon RDS</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: AWS Management Console</div>
+        </div>
+
+        <!-- Cloud Computing Basics Questions -->
+        <div class="question" data-answer="Delivering computing services over the internet">
+            <h3>6. What is cloud computing?</h3>
+            <div class="options">
+                <label><input type="radio" name="q6" value="Delivering computing services over the internet"> Delivering computing services over the internet</label>
+                <label><input type="radio" name="q6" value="Running applications locally on a computer"> Running applications locally on a computer</label>
+                <label><input type="radio" name="q6" value="Using a computer for gaming"> Using a computer for gaming</label>
+                <label><input type="radio" name="q6" value="Networking between multiple computers"> Networking between multiple computers</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Delivering computing services over the internet</div>
+        </div>
+
+        <div class="question" data-answer="Scalability">
+            <h3>7. Which of the following is a primary benefit of cloud computing?</h3>
+            <div class="options">
+                <label><input type="radio" name="q7" value="Increased hardware costs"> Increased hardware costs</label>
+                <label><input type="radio" name="q7" value="Scalability"> Scalability</label>
+                <label><input type="radio" name="q7" value="Limited storage"> Limited storage</label>
+                <label><input type="radio" name="q7" value="Restricted access to resources"> Restricted access to resources</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Scalability</div>
+        </div>
+
+        <div class="question" data-answer="Public Cloud">
+            <h3>8. What is the most common deployment model for cloud computing?</h3>
+            <div class="options">
+                <label><input type="radio" name="q8" value="Public Cloud"> Public Cloud</label>
+                <label><input type="radio" name="q8" value="Private Cloud"> Private Cloud</label>
+                <label><input type="radio" name="q8" value="Hybrid Cloud"> Hybrid Cloud</label>
+                <label><input type="radio" name="q8" value="Community Cloud"> Community Cloud</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Public Cloud</div>
+        </div>
+
+        <div class="question" data-answer="Elasticity">
+            <h3>9. What term describes the ability to scale resources up or down based on demand?</h3>
+            <div class="options">
+                <label><input type="radio" name="q9" value="Elasticity"> Elasticity</label>
+                <label><input type="radio" name="q9" value="Reliability"> Reliability</label>
+                <label><input type="radio" name="q9" value="Availability"> Availability</label>
+                <label><input type="radio" name="q9" value="Portability"> Portability</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: Elasticity</div>
+        </div>
+
+        <div class="question" data-answer="On-Demand Pricing">
+            <h3>10. What is the billing model where you pay only for the resources you use in cloud computing?</h3>
+            <div class="options">
+                <label><input type="radio" name="q10" value="On-Demand Pricing"> On-Demand Pricing</label>
+                <label><input type="radio" name="q10" value="Reserved Pricing"> Reserved Pricing</label>
+                <label><input type="radio" name="q10" value="Subscription Pricing"> Subscription Pricing</label>
+                <label><input type="radio" name="q10" value="Tiered Pricing"> Tiered Pricing</label>
+            </div>
+            <div class="explanation" style="display:none;">Correct Answer: On-Demand Pricing</div>
+        </div>
+
+        <button id="submit-btn">Submit</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('submit-btn').onclick = function() {
+            let score = 0;
+            const totalQuestions = 10; // Updated to 10
+            const questions = document.querySelectorAll('.question');
+            
+            questions.forEach((question, index) => {
+                const selected = question.querySelector('input[type="radio"]:checked');
+                const correctAnswer = question.getAttribute('data-answer');
+                const explanation = question.querySelector('.explanation');
+
+                // Show explanation
+                explanation.style.display = 'block';
+
+                if (selected) {
+                    const selectedValue = selected.value;
+                    if (selectedValue === correctAnswer) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        // Highlight the correct answer
+                        const options = question.querySelectorAll('input[type="radio"]');
+                        options.forEach(option => {
+                            if (option.value === correctAnswer) {
+                                option.parentElement.classList.add('correct');
+                            }
+                        });
+                    }
+                } else {
+                    // If no option is selected, highlight the correct answer
+                    const options = question.querySelectorAll('input[type="radio"]');
+                    options.forEach(option => {
+                        if (option.value === correctAnswer) {
+                            option.parentElement.classList.add('correct');
+                        }
+                    });
+                }
+
+                // Disable all inputs after submission
+                const inputs = question.querySelectorAll('input[type="radio"]');
+                inputs.forEach(input => input.disabled = true);
+            });
+
+            // Display the score
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `You scored ${score} out of ${totalQuestions}`;
+
+            // Disable the submit button after submission
+            document.getElementById('submit-btn').disabled = true;
+        }
+    </script>
+</body>
+</html>

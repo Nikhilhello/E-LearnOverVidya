@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="collegeApp" ng-controller="QuizController">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+  <title>Quiz - E-LearnOver Vidya</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+    }
+
+    .quiz-container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 32px;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .quiz-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .quiz-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .quiz-header h3 {
+      font-size: 20px;
+      margin: 0;
+      color: #34495e;
+    }
+
+    .difficulty {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .easy { background-color: #27ae60; }
+    .medium { background-color: #f39c12; }
+    .hard { background-color: #c0392b; }
+
+    .quiz-description {
+      margin: 15px 0;
+      color: #666;
+      font-size: 14px;
+      min-height: 60px;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 15px;
+    }
+
+    .start-btn {
+      align-self: flex-end;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #3498db;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .start-btn:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body ng-controller="QuizController">
+<h2 class="section-title">Available Quizzes</h2>
+  <div class="quiz-container">
+    
+
+    <div class="quiz-grid">
+      <div class="quiz-card" ng-repeat="quiz in quizzes">
+        <div class="quiz-header">
+          <h3>{{quiz.title}}</h3>
+          <span class="difficulty {{quiz.difficulty | lowercase}}">{{quiz.difficulty}}</span>
+        </div>
+        <p class="quiz-description">{{quiz.description}}</p>
+        <div class="quiz-meta">
+          <span><i class="fas fa-question-circle"></i> {{quiz.numQuestions}} Questions</span>
+          <span><i class="fas fa-clock"></i> {{quiz.time}} min</span>
+        </div>
+        <button class="start-btn" ng-click="startQuiz(quiz)">Start Quiz</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    var app = angular.module('myApp', []);
+
+    app.controller('QuizController', function($scope) {
+      // Static data (no backend)
+      $scope.quizzes = [
+        {
+          id: 1,
+          title: 'Java Basics',
+          description: 'Test your knowledge of basic Java concepts.',
+          difficulty: 'Easy',
+          numQuestions: 10,
+          time: 15
+        },
+        {
+          id: 2,
+          title: 'Data Structures',
+          description: 'Challenge your understanding of data structures and their applications.',
+          difficulty: 'Medium',
+          numQuestions: 12,
+          time: 20
+        },
+        {
+          id: 3,
+          title: 'Operating Systems',
+          description: 'A quiz on OS fundamentals including memory, process, and scheduling.',
+          difficulty: 'Hard',
+          numQuestions: 15,
+          time: 25
+        },
+        {
+          id: 4,
+          title: 'Web Development',
+          description: 'Check your knowledge of HTML, CSS, and JavaScript basics.',
+          difficulty: 'Easy',
+          numQuestions: 8,
+          time: 10
+        }
+      ];
+
+      $scope.startQuiz = function(quizId) {
+        alert('Quiz ' + quizId + ' started! (Link it to quiz-taking page if needed)');
+      };
+    });
+  </script>
+
+</body>
+</html>

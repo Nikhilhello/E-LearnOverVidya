@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="osQuizApp">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+  <title>Operating Systems Quiz</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      padding: 30px;
+    }
+    .quiz-box {
+      max-width: 750px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      background: #f9f9f9;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .options input[type="radio"] {
+      margin-right: 10px;
+    }
+    .options label:hover {
+      background: #e6f0ff;
+    }
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    #result {
+      text-align: center;
+      font-size: 22px;
+      margin-top: 25px;
+      display: block;
+    }
+  </style>
+</head>
+<body ng-controller="QuizController">
+
+<center><h1>Operating System Quiz</h1></center>
+
+  <div class="quiz-box" ng-if="!quizCompleted">
+    <div class="question">
+      Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}:
+      <p>{{ currentQuestion().text }}</p>
+    </div>
+
+    <div class="options">
+      <label ng-repeat="option in currentQuestion().options">
+        <input type="radio" name="option" ng-model="$parent.userAnswers[currentQuestionIndex]" ng-value="option"> {{ option }}
+      </label>
+    </div>
+
+    <div class="btns">
+      <button ng-click="prevQuestion()" ng-disabled="currentQuestionIndex === 0">Previous</button>
+      <button ng-click="nextQuestion()" ng-if="currentQuestionIndex < questions.length - 1">Next</button>
+      <button ng-click="submitQuiz()" ng-if="currentQuestionIndex === questions.length - 1">Submit</button>
+    </div>
+  </div>
+
+  <div id="result" ng-if="quizCompleted">
+    <p>You scored {{ score }} out of {{ questions.length }}!</p>
+    <p ng-if="score/questions.length >= 0.8">🎉 Great job! You really know your stuff!</p>
+    <p ng-if="score/questions.length >= 0.5 && score/questions.length < 0.8">👍 Good effort! A little more practice and you'll master it.</p>
+    <p ng-if="score/questions.length < 0.5">📝 Keep going! Review the concepts and try again.</p>
+  </div>
+
+  <script>
+    angular.module('osQuizApp', [])
+      .controller('QuizController', function($scope) {
+        $scope.questions = [
+          {
+            text: "What is the main function of an Operating System?",
+            answer: "Manage computer resources",
+            options: [
+              "Run application software",
+              "Compile programs",
+              "Manage computer resources",
+              "Create databases"
+            ]
+          },
+          {
+            text: "Which of these is *not* a type of operating system?",
+            answer: "Command OS",
+            options: [
+              "Real-Time OS",
+              "Batch OS",
+              "Distributed OS",
+              "Command OS"
+            ]
+          },
+          {
+            text: "Which algorithm is used for CPU scheduling?",
+            answer: "Round Robin",
+            options: [
+              "Binary Search",
+              "Round Robin",
+              "DFS",
+              "Quick Sort"
+            ]
+          },
+          {
+            text: "Which of the following causes a deadlock?",
+            answer: "Mutual exclusion, hold and wait, no preemption, circular wait",
+            options: [
+              "Limited memory",
+              "Shortest job first",
+              "Multitasking",
+              "Mutual exclusion, hold and wait, no preemption, circular wait"
+            ]
+          },
+          {
+            text: "What is a process?",
+            answer: "An active program in execution",
+            options: [
+              "A programming language",
+              "An active program in execution",
+              "An instruction",
+              "A hardware component"
+            ]
+          }
+        ];
+
+        $scope.currentQuestionIndex = 0;
+        $scope.userAnswers = new Array($scope.questions.length);
+        $scope.quizCompleted = false;
+        $scope.score = 0;
+
+        $scope.currentQuestion = function() {
+          return $scope.questions[$scope.currentQuestionIndex];
+        };
+
+        $scope.nextQuestion = function() {
+          if ($scope.currentQuestionIndex < $scope.questions.length - 1) {
+            $scope.currentQuestionIndex++;
+          }
+        };
+
+        $scope.prevQuestion = function() {
+          if ($scope.currentQuestionIndex > 0) {
+            $scope.currentQuestionIndex--;
+          }
+        };
+
+        $scope.submitQuiz = function() {
+          $scope.score = 0;
+          for (let i = 0; i < $scope.questions.length; i++) {
+            if ($scope.userAnswers[i] === $scope.questions[i].answer) {
+              $scope.score++;
+            }
+          }
+          $scope.quizCompleted = true;
+        };
+      });
+  </script>
+</body>
+</html>

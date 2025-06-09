@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f4f6f9;
+    color: #333;
+  }
+
+  header {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+  }
+
+body {
+  background-color: #f6f8fc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 28px;
+  color: #333;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.col-md-6 {
+  flex: 0 0 48%;
+  box-sizing: border-box;
+}
+
+.col-md-3 {
+  flex: 0 0 23%;
+  box-sizing: border-box;
+}
+
+.zigzag-card {
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: 0.3s;
+  border-left: 4px solid #0d6efd;
+}
+
+.zigzag-card:hover {
+  transform: translateY(-3px);
+}
+
+.zigzag-card h5 {
+  font-size: 18px;
+  color: #0d6efd;
+  margin-bottom: 10px;
+}
+
+.zigzag-card p {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+}
+
+img {
+  width: 100%;
+  max-width: 150px;
+  display: block;
+  margin: 0 auto;
+}
+
+.stats-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stats-card i {
+  font-size: 24px;
+  color: #0d6efd;
+  margin-bottom: 8px;
+}
+
+.stats-card h4 {
+  font-size: 22px;
+  margin: 0;
+  color: #111;
+}
+
+.stats-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+.shortcut-btn {
+  border-radius: 30px;
+  padding: 12px 24px;
+  margin: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* Quick Actions */
+.btn-primary {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #495057;
+  color: white;
+}
+
+.btn-success {
+  background-color: #198754;
+  color: white;
+}
+
+.btn-warning {
+  background-color: red;
+  color: white;
+}
+
+.btn-info {
+  background-color: #0dcaf0;
+  color: #212529;
+}
+
+.btn-dark {
+  background-color: #212529;
+  color: white;
+}    /* Quick Actions end */
+
+/* Responsive */
+@media (max-width: 768px) {
+  .col-md-6, .col-md-3 {
+    flex: 0 0 100%;
+    margin-bottom: 20px;
+  }
+
+  .shortcut-btn {
+    width: 100%;
+  }
+}
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #f1f1f1;
+      font-size: 0.9rem;
+    }
+
+</style>
+
+</head>
+<body>
+
+<div ng-controller="AdminHomeController">
+ 
+<header>
+  <b><p style="font-size: 40px;">{{ message }}</p></b>
+  <p style="font-size: 18px;">Manage and Monitor the E-LearnOver Vidya platform <u>effectively</u></p>
+</header>
+
+  <div class="container my-5">
+    <!-- Responsibilities -->
+    <h2 class="mb-4" data-aos="fade-up">Your Responsibilities</h2>
+    <div class="zigzag-section">
+      <div class="row align-items-center mb-4" data-aos="fade-right">
+        <div class="col-md-6">
+          <div class="zigzag-card">
+            <h5><i class="fas fa-book"></i> Manage Students</h5>
+            <p>Add, update, or remove the students.</p>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+                <!--   <img src="https://img.icons8.com/?size=100&id=jF8g9G3v7KE6&format=png&color=000000" width="150" alt="student">  -->
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="200" alt="student">
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4" data-aos="fade-left">
+        <div class="col-md-6 text-center">
+           <img src="https://cdn.iconscout.com/icon/premium/png-512-thumb/manage-8454182-6905171.png?f=webp&w=512" width="100" alt="Courses">
+        </div>
+        <div class="col-md-6">
+          <div class="zigzag-card">
+            <h5><i class="fas fa-book"></i> Manage Courses</h5>
+            <p>Add, update, or remove courses offered to students.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4" data-aos="fade-right">
+        <div class="col-md-6">
+          <div class="zigzag-card">
+            <h5><i class="fas fa-user-check"></i> Approve Registrations</h5>
+            <p>Review and approve or reject student/admin registration requests.</p>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <img src="https://img.icons8.com/?size=100&id=qEK2pqenBa22&format=png&color=000000" width="150" alt="Users">
+        </div>
+      </div>
+
+      <div class="row align-items-center mb-4" data-aos="fade-left">
+  <div class="col-md-6 text-center">
+    <img src="https://img.icons8.com/?size=100&id=58347&format=png&color=000000" width="150" alt="Calendar">
+  </div>
+  <div class="col-md-6">
+    <div class="zigzag-card">
+              <h5><i class="fas fa-calendar-check"></i> Manage Events</h5>
+            <p>Update calendar with events, deadlines, and live sessions.</p>
+    </div>
+  </div>
+</div>
+
+<div class="row align-items-center mb-4" data-aos="fade-right">
+  <div class="col-md-6">
+    <div class="zigzag-card">
+      <h5><i class="fas fa-blog"></i> Manage Blog & Announcements</h5>
+      <p>Create, edit, and publish informative blog posts and important platform announcements.</p>
+    </div>
+  </div>
+  <div class="col-md-6 text-center">
+   <!--  <img src="https://cdn-icons-png.flaticon.com/512/4212/4212568.png" width="150" alt="Blog">  -->
+    <img src="https://img.icons8.com/?size=100&id=12489&format=png&color=000000" width="150" alt="Blog">
+  </div>
+</div>
+
+      <div class="row align-items-center mb-4" data-aos="fade-left">
+        <div class="col-md-6 text-center">
+        <!--   <img src="https://cdn-icons-png.flaticon.com/512/843/843293.png" width="150" alt="Monitoring">  -->
+          <img src="https://img.icons8.com/?size=100&id=mqcxFECRbI85&format=png&color=000000" width="150" alt="Monitoring">
+        </div>
+        <div class="col-md-6">
+          <div class="zigzag-card">
+            <h5><i class="fas fa-user-shield"></i> Monitor User Activity</h5>
+            <p>Track student and teacher activity logs for better platform oversight and auditing.</p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Quick Stats -->
+    <h2 class="my-4" data-aos="fade-up">Quick Stats</h2>
+    <div class="row text-center mb-5">
+      <div class="col-md-3" data-aos="zoom-in">
+        <div class="stats-card">
+          <div class="icon-circle"><i class="fas fa-users"></i></div>
+          <h4>150+</h4>
+          <p>Students</p>
+        </div>
+      </div>
+      <div class="col-md-3" data-aos="zoom-in">
+        <div class="stats-card">
+          <div class="icon-circle"><i class="fas fa-book-open"></i></div>
+          <h4>25+</h4>
+          <p>Courses</p>
+        </div>
+      </div>
+      <div class="col-md-3" data-aos="zoom-in">
+        <div class="stats-card">
+          <div class="icon-circle"><i class="fas fa-question-circle"></i></div>
+          <h4>10+</h4>
+          <p>Active Quizzes</p>
+        </div>
+      </div>
+      <div class="col-md-3" data-aos="zoom-in">
+        <div class="stats-card">
+          <div class="icon-circle"><i class="fas fa-headset"></i></div>
+          <h4>8</h4>
+          <p>Support Tickets</p>
+        </div>
+      </div>
+            <div class="col-md-3" data-aos="zoom-in">
+        <div class="stats-card">
+          <div class="icon-circle"><i class="fa-solid fa-hourglass-half"></i></div>
+          <h4>5</h4>
+          <p>Pending Approvals</p>
+        </div>
+      </div>
+            <div class="col-md-3" data-aos="zoom-in">
+        <div class="stats-card">
+          <div class="icon-circle"><i class="fa-solid fa-person-chalkboard"></i></div>
+          <h4>6</h4>
+          <p>Active Instructors</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Shortcuts -->
+    <h2 class="mb-4" data-aos="fade-up">Quick Actions</h2>
+    <div class="text-center mb-5">
+      <button class="btn btn-primary shortcut-btn" data-aos="fade-right"><i class="fas fa-plus"></i> Add Course</button>
+      <button class="btn btn-secondary shortcut-btn" data-aos="fade-up"><i class="fas fa-ticket-alt"></i> View Tickets</button>
+      <button class="btn btn-success shortcut-btn" data-aos="fade-left"><i class="fas fa-bullhorn"></i> Post Announcement</button>
+      <button class="btn btn-warning shortcut-btn" data-aos="fade-right"><i class="fas fa-calendar-plus"></i> Add Event</button>
+<button class="btn btn-info shortcut-btn" data-aos="fade-up"><i class="fas fa-user-cog"></i> Manage Admins</button>
+<button class="btn btn-dark shortcut-btn" data-aos="fade-left"><i class="fas fa-chart-line"></i> View Reports</button>
+      
+    </div>
+  </div>
+  
+  
+  <footer>
+  &copy; 2025 E-LearnOver Vidya | Admin Panel
+</footer>
+</div>
+
+
+</body>
+</html>
+
+

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizApp" ng-controller="TakeQuizController">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+  <title>Java Basics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f8fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .quiz-box {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .quiz-title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #34495e;
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    .options label {
+      display: block;
+      margin: 10px 0;
+      padding: 12px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .options input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .options label:hover {
+      background-color: #ecf0f1;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .nav-buttons button {
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      background-color: #3498db;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .nav-buttons button:hover {
+      background-color: #2980b9;
+    }
+
+    .nav-buttons button[disabled] {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    .correct {
+      border-color: #2ecc71;
+      background-color: #eafaf1;
+    }
+
+    .incorrect {
+      border-color: #e74c3c;
+      background-color: #fdecea;
+    }
+
+    .explanation {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+      background: #f9f9f9;
+      border-left: 4px solid #3498db;
+      padding: 10px 15px;
+      border-radius: 8px;
+    }
+
+    .your-answer-tag {
+      position: absolute;
+      right: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Quiz in Progress -->
+  <div class="quiz-box" ng-if="!showResult">
+    <div class="quiz-title">Quiz: {{ quizTitle }}</div>
+    <div class="question">
+      Question {{ currentQuestion + 1 }} of {{ questions.length }}:<br>
+      {{ questions[currentQuestion].text }}
+    </div>
+    <div class="options">
+      <label ng-repeat="option in questions[currentQuestion].options">
+        <input type="radio"
+               name="option"
+               ng-value="option"
+               ng-model="userAnswers[currentQuestion]"
+               ng-disabled="showResult">
+        {{ option }}
+      </label>
+    </div>
+    <div class="nav-buttons">
+      <button ng-click="prevQuestion()" ng-disabled="currentQuestion === 0">Previous</button>
+      <button ng-click="nextQuestion()" ng-if="currentQuestion < questions.length - 1">Next</button>
+      <button ng-click="submitQuiz()" ng-if="currentQuestion === questions.length - 1">Submit</button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="quiz-box" ng-if="showResult">
+    <div class="quiz-title">Quiz Completed!</div>
+
+    <div style="font-size: 20px; text-align: center; color: #2c3e50; margin-bottom: 20px;">
+      You scored <strong>{{ score }}</strong> out of <strong>{{ questions.length }}</strong><br>
+      <span style="font-size: 18px; color: #16a085;">
+        ({{ (score/questions.length * 100) | number:0 }}%)
+      </span>
+    </div>
+
+    <div style="text-align:center; font-weight: bold; color: #8e44ad; margin-bottom: 30px;">
+      <span ng-if="score/questions.length >= 0.8">🎉 Great job! You really know your stuff!</span>
+      <span ng-if="score/questions.length >= 0.5 && score/questions.length < 0.8">👍 Good effort! A little more practice and you'll master it.</span>
+      <span ng-if="score/questions.length < 0.5">📝 Keep going! Review the explanations and try again.</span>
+    </div>
+
+    <div ng-repeat="q in questions track by $index" style="margin-bottom: 25px;">
+      <div class="question">Q{{$index + 1}}. {{ q.text }}</div>
+      <div class="options">
+        <label ng-repeat="opt in q.options"
+               ng-class="{
+                 'correct': opt === q.answer,
+                 'incorrect': userAnswers[$index] === opt && opt !== q.answer
+               }">
+          <input type="radio" disabled ng-checked="userAnswers[$index] === opt">
+          {{ opt }}
+          <span class="your-answer-tag" ng-if="userAnswers[$index] === opt">(Your answer)</span>
+        </label>
+      </div>
+      <div class="explanation"><strong>Explanation:</strong> {{ q.explanation }}</div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+  <a href="#!/quiz" style="padding: 10px 20px; background-color: #95a5a6; color: white; border: none; border-radius: 8px; text-decoration: none; font-weight: bold;">
+    ⬅ Back
+  </a>
+</div>
+    
+  </div>
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    var app = angular.module('quizApp', []);
+
+    app.controller('TakeQuizController', function($scope) {
+      $scope.quizTitle = "Java Basics";
+
+      $scope.questions = [
+        {
+          text: "Which keyword is used to define a class in Java?",
+          options: ["class", "Class", "struct", "define"],
+          answer: "class",
+          explanation: "The correct keyword is 'class'. Java is case-sensitive, so 'Class' is incorrect."
+        },
+        {
+          text: "Which of these is not a primitive data type?",
+          options: ["int", "float", "String", "boolean"],
+          answer: "String",
+          explanation: "'String' is a class in Java, not a primitive data type."
+        },
+        {
+          text: "What is the default value of a boolean variable?",
+          options: ["true", "false", "0", "null"],
+          answer: "false",
+          explanation: "In Java, boolean variables default to false."
+        },
+        {
+          text: "Which method is the entry point of a Java program?",
+          options: ["main()", "start()", "run()", "init()"],
+          answer: "main()",
+          explanation: "The Java program starts execution from the main() method."
+        }
+      ];
+
+      $scope.userAnswers = [];
+      $scope.currentQuestion = 0;
+      $scope.showResult = false;
+      $scope.score = 0;
+
+      $scope.nextQuestion = function() {
+        if ($scope.currentQuestion < $scope.questions.length - 1) {
+          $scope.currentQuestion++;
+        }
+      };
+
+      $scope.prevQuestion = function() {
+        if ($scope.currentQuestion > 0) {
+          $scope.currentQuestion--;
+        }
+      };
+
+      $scope.submitQuiz = function() {
+        $scope.score = 0;
+        for (var i = 0; i < $scope.questions.length; i++) {
+          if ($scope.userAnswers[i] === $scope.questions[i].answer) {
+            $scope.score++;
+          }
+        }
+        $scope.showResult = true;
+      };
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="webdevQuizApp">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+  <title>Web Development Quiz</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .quiz-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .quiz-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .quiz-header h2 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .question {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .options label {
+      display: block;
+      background: #f9f9f9;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    .options label:hover {
+      background: #e1f5fe;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 48%;
+    }
+
+    button:disabled {
+      background: #ddd;
+      cursor: not-allowed;
+    }
+
+    #result {
+      text-align: center;
+      font-size: 22px;
+      margin-top: 30px;
+    }
+
+    #result p {
+      font-weight: bold;
+    }
+
+    .result-feedback {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body ng-controller="QuizController">
+
+  <div class="quiz-container" ng-if="!quizCompleted">
+    <div class="quiz-header">
+      <h2>Web Development Quiz</h2>
+      <p>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</p>
+    </div>
+
+    <div class="question">
+      <p>{{ currentQuestion().text }}</p>
+    </div>
+
+    <div class="options">
+      <label ng-repeat="option in currentQuestion().options">
+        <input type="radio" name="option" ng-model="$parent.userAnswers[currentQuestionIndex]" ng-value="option"> {{ option }}
+      </label>
+    </div>
+
+    <div class="btns">
+      <button ng-click="prevQuestion()" ng-disabled="currentQuestionIndex === 0">Previous</button>
+      <button ng-click="nextQuestion()" ng-if="currentQuestionIndex < questions.length - 1">Next</button>
+      <button ng-click="submitQuiz()" ng-if="currentQuestionIndex === questions.length - 1">Submit</button>
+    </div>
+  </div>
+
+  <div id="result" ng-if="quizCompleted">
+    <p>You scored <span>{{ score }}</span> out of {{ questions.length }}!</p>
+    <p class="result-feedback" ng-if="score/questions.length >= 0.8">🎉 Great job! You really know your stuff!</p>
+    <p class="result-feedback" ng-if="score/questions.length >= 0.5 && score/questions.length < 0.8">👍 Good effort! A little more practice and you'll master it.</p>
+    <p class="result-feedback" ng-if="score/questions.length < 0.5">📝 Keep going! Review the concepts and try again.</p>
+  </div>
+
+  <script>
+    angular.module('webdevQuizApp', [])
+      .controller('QuizController', function($scope) {
+        $scope.questions = [
+          {
+            text: "Which HTML tag is used to define an internal style sheet?",
+            answer: "style",
+            options: [
+              "style",
+              "css",
+              "script",
+              "link"
+            ]
+          },
+          {
+            text: "Which CSS property is used to change the font of an element?",
+            answer: "font-family",
+            options: [
+              "font-style",
+              "font-family",
+              "text-decoration",
+              "font-size"
+            ]
+          },
+          {
+            text: "What does CSS stand for?",
+            answer: "Cascading Style Sheets",
+            options: [
+              "Creative Style Sheets",
+              "Cascading Style Sheets",
+              "Colorful Style Sheets",
+              "Computer Style Sheets"
+            ]
+          },
+          {
+            text: "What is the correct HTML element for inserting a line break?",
+            answer: "<br>",
+            options: [
+              "<br>",
+              "<break>",
+              "<lb>",
+              "<hr>"
+            ]
+          },
+          {
+            text: "What does the 'id' attribute in HTML do?",
+            answer: "Defines a unique identifier for an element",
+            options: [
+              "Links to a stylesheet",
+              "Defines a unique identifier for an element",
+              "Describes the role of the element",
+              "Provides a description for the element"
+            ]
+          },
+          {
+            text: "Which of these is used to link external JavaScript files to an HTML document?",
+            answer: "<script src='file.js'>",
+            options: [
+              "<script src='file.js'>",
+              "<link href='file.js'>",
+              "<javascript src='file.js'>",
+              "<script href='file.js'>"
+            ]
+          },
+          {
+            text: "Which of the following is a valid way to define a JavaScript array?",
+            answer: "let arr = [1, 2, 3]",
+            options: [
+              "let arr = (1, 2, 3)",
+              "let arr = [1, 2, 3]",
+              "let arr = {1, 2, 3}",
+              "let arr = 1, 2, 3"
+            ]
+          },
+          {
+            text: "Which JavaScript keyword is used to declare a variable?",
+            answer: "let",
+            options: [
+              "let",
+              "var",
+              "const",
+              "function"
+            ]
+          },
+          {
+            text: "What does the 'window.onload' event do in JavaScript?",
+            answer: "It runs code when the page has finished loading",
+            options: [
+              "It runs code when the page has finished loading",
+              "It runs code when a button is clicked",
+              "It runs code when an image is clicked",
+              "It runs code when a user submits a form"
+            ]
+          },
+          {
+            text: "What does JSON stand for?",
+            answer: "JavaScript Object Notation",
+            options: [
+              "JavaScript Object Notation",
+              "JavaScript Online Notation",
+              "Java Object Notation",
+              "JavaScript Open Notation"
+            ]
+          }
+        ];
+
+        $scope.currentQuestionIndex = 0;
+        $scope.userAnswers = new Array($scope.questions.length);
+        $scope.quizCompleted = false;
+        $scope.score = 0;
+
+        $scope.currentQuestion = function() {
+          return $scope.questions[$scope.currentQuestionIndex];
+        };
+
+        $scope.nextQuestion = function() {
+          if ($scope.currentQuestionIndex < $scope.questions.length - 1) {
+            $scope.currentQuestionIndex++;
+          }
+        };
+
+        $scope.prevQuestion = function() {
+          if ($scope.currentQuestionIndex > 0) {
+            $scope.currentQuestionIndex--;
+          }
+        };
+
+        $scope.submitQuiz = function() {
+          $scope.score = 0;
+          for (let i = 0; i < $scope.questions.length; i++) {
+            if ($scope.userAnswers[i] === $scope.questions[i].answer) {
+              $scope.score++;
+            }
+          }
+          $scope.quizCompleted = true;
+        };
+      });
+  </script>
+</body>
+</html>

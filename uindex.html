@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="icon" href="https://img.icons8.com/fluency/48/books.png" />    -->
+<link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+
+<title>E-LearnOver Vidya</title>
+    
+    <!-- Load AngularJS and ngRoute -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+
+<!-- 1. FullCalendar first -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+
+<!-- 
+<script>
+    if (!localStorage.getItem("loggedInUser")) {
+        window.location.href = "login.html"; // Redirect to login page if not logged in
+    }
+</script>
+
+-->
+
+<script type="text/javascript">
+var app = angular.module("collegeApp", ["ngRoute"]);
+
+//Configure Routing
+app.config(function($routeProvider) {
+ $routeProvider
+     .when("/", {
+         templateUrl: "uhome.html",
+         controller: "HomeController"
+     })
+     .when("/students", {
+         templateUrl: "students.html",
+         controller: "UserStudentController"
+     })
+     .when("/courses", {
+         templateUrl: "courses.html",
+         controller: "CoursesController"
+     })
+     .when("/classroom", {
+         templateUrl: "classroom.html",
+         controller: "ClassroomController"
+     })
+     .when("/quiz", {
+         templateUrl: "quiz.html",
+         controller: "QuizController"
+     })
+     .when("/calendar", {
+         templateUrl: "calendar.jsp",
+         controller: "CalendarController"
+     })
+     .when("/blog", {
+         templateUrl: "blog.html",
+         controller: "BlogController"
+     })
+     .otherwise({
+         redirectTo: function() {
+             // Full-page redirect to u404.html if route not found
+             window.location.href = "u404.html";
+         }
+     });
+});
+
+//Home Page Controller
+app.controller("HomeController", function($scope) {
+ $scope.message = "Welcome to E-LearnOver Vidya";
+});
+
+
+
+/*  //Students Page Controller 
+app.controller("StudentsController", function($scope) {
+ $scope.students = [
+     { id: 1, name: "John Doe", course: "Computer Science" },
+     { id: 2, name: "Jane Smith", course: "Information Technology" },
+     { id: 3, name: "Michael Brown", course: "Electronics" }
+ ];
+});   
+*/
+
+
+
+
+
+//Classroom Page Controller   -----------
+app.controller("CoursesController", function ($scope, $http) {
+    $http.get("http://localhost:2020/web/UserCourseServlet")
+        .then(function (response) {
+            $scope.classrooms = response.data;
+        })
+        .catch(function (error) {
+            console.error("Error fetching courses:", error);
+        });
+});
+
+
+
+//Classroom Page Controller   woring-----------
+app.controller("ClassroomController", function ($scope, $http) {
+    $http.get("http://localhost:2020/web/ClassroomServlet")
+        .then(function (response) {
+            $scope.classrooms = response.data;
+        })
+        .catch(function (error) {
+            console.error("Error fetching classrooms:", error);
+        });
+});
+
+</script>
+
+
+
+<script>
+//Students Page Controller 
+    app.controller('UserStudentController', function($scope) {
+        $scope.students = [
+            { name: "Aditi Sharma", course: "Web Development", skills: ["HTML", "CSS", "JavaScript"], profilePic: "images/aditi.jpg" },
+            { name: "Rahul Verma", course: "Data Structures", skills: ["C++", "Algorithms"], profilePic: "images/rahul.jpg" },
+            { name: "Sneha Das", course: "Machine Learning", skills: ["Python", "Data Science", "TensorFlow"], profilePic: "images/sneha.jpg" },
+            { name: "John Paul", course: "Database Systems", skills: ["MySQL", "JDBC", "ER Diagrams"], profilePic: "" },
+            { name: "Riya Mehta", course: "Cyber Security", skills: ["Linux", "Ethical Hacking", "Wireshark"], profilePic: "" },
+            { name: "Aman Gupta", course: "Android Development", skills: ["Java", "Kotlin", "Firebase"], profilePic: "" }
+        ];
+
+        $scope.popularCourses = ["Web Development", "Machine Learning", "Cyber Security"];
+        $scope.topSkills = ["JavaScript", "Python", "C++", "Linux", "MySQL"];
+    });
+</script>
+
+
+<script type="text/javascript">
+
+// course modificatins..
+app.controller("CoursesController", function($scope, $http) {
+    $scope.courses = [];
+    $scope.newCourse = {};
+    $scope.editingCourse = null;
+
+    // Load all courses
+    $scope.loadCourses = function() {
+        $http.get('CourseServlet')
+            .then(function(response) {
+                $scope.courses = response.data;
+            })
+            .catch(function(error) {
+                console.error("Error loading courses:", error);
+                alert("Error loading courses. Check console for details.");
+            });
+    };
+
+    // Cancel editing
+    $scope.cancelEdit = function() {
+        $scope.editingCourse = null;
+    };
+
+    // Add new course
+    $scope.addCourse = function() {
+        $http({
+            method: 'POST',
+            url: 'CourseServlet',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                }
+                return str.join("&");
+            },
+            data: {
+                action: 'add',
+                name: $scope.newCourse.name
+            }
+        }).then(function(response) {
+            alert("Course added successfully!");
+            $scope.newCourse = {};
+            $scope.loadCourses();
+        }).catch(function(error) {
+            console.error("Error adding course:", error);
+            alert("Failed to add course. Check console for details.");
+        });
+    };
+
+
+    // Initialize
+    $scope.loadCourses();
+});
+</script>
+<script type="text/javascript">
+//Add course to classroom_c table
+app.controller("UserCoursesController", function($scope, $http) {
+    $scope.courses = [];
+
+    // Load all courses
+    $scope.loadCourses = function() {
+        $http.get("CourseServlet")
+            .then(function(response) {
+                $scope.courses = response.data;
+            })
+            .catch(function(error) {
+                console.error("Error loading courses:", error);
+            });
+    };
+
+    // Add course to classroom
+    $scope.addCourse = function(course) {
+        $http({
+            method: 'POST',
+            url: 'UserCourseServlet',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            transformRequest: function(obj) {
+                var str = [];
+                for (var p in obj) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                }
+                return str.join("&");
+            },
+            data: {
+                course_id: course.id,
+                course_name: course.name
+            }
+        }).then(function(response) {
+            alert("Course added to classroom!");
+        }).catch(function(error) {
+            console.error("Error adding course to classroom:", error);
+            alert("Failed to add course to classroom.");
+        });
+    };
+
+    // Initialize
+    $scope.loadCourses();
+});
+</script>
+
+<script>  
+/* this is for calender */
+app.controller('CalendarController', function($scope, $timeout) {
+    $timeout(function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            events: [
+              {
+                title: 'Java Live Class',
+                start: '2025-05-08',
+                color: '#60a5fa'
+              },
+              {
+                title: 'Quiz: OOP Concepts',
+                start: '2025-04-18',
+                color: '#f87171'
+              },
+              {
+                title: 'Assignment 3 Due',
+                start: '2025-04-22',
+                color: '#fbbf24'
+              },
+              {
+                title: 'Group Discussion',
+                start: '2025-04-25',
+                color: '#a78bfa'
+              }
+            ],
+            eventClick: function (info) {
+              alert("Event: " + info.event.title + "\nDate: " + info.event.start.toDateString());
+            }
+        });
+
+        calendar.render();
+    }, 0); // Runs after DOM is ready
+});
+</script>
+
+<script type="text/javascript">
+app.controller("BlogController", function($scope) {
+    $scope.blogs = [
+      {
+        title: "10 Study Hacks to Boost Your Learning",
+        content: "Studying smarter, not harder, is the key to success in modern education. In this post, we cover ten proven strategies to help you retain more information and stay focused...",
+        author: "Dr. Meena Kapoor",
+        date: "2025-04-10",
+        thumbnail: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        title: "The Rise of E-Learning: Why It’s the Future",
+        content: "E-learning has transformed the way we acquire knowledge. With flexible schedules, personalized paths, and worldwide access, it’s changing lives—one student at a time...",
+        author: "Rajeev Sharma",
+        date: "2025-04-08",
+        thumbnail: "https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        title: "Balancing Work and Online Courses: Tips for Busy Learners",
+        content: "If you’re juggling work, life, and online education, you’re not alone. Discover how to manage your time effectively and reduce stress while pursuing your academic goals...",
+        author: "Anita Desai",
+        date: "2025-04-05",
+        thumbnail: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        title: "Top 5 Career-Boosting Courses in 2025",
+        content: "Looking to upgrade your skills this year? We list the top five online courses that can give your career the boost it needs in fields like AI, Data Science, and Communication...",
+        author: "Mohit Verma",
+        date: "2025-04-01",
+        thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+    	    title: "How to Stay Motivated During Long Courses",
+    	    content: "Staying motivated during lengthy online courses can be tough. Here are some psychological tricks and scheduling tips to help you keep going until the finish line...",
+    	    author: "Sneha Rathi",
+    	    date: "2025-03-28",
+    	    thumbnail: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?fit=crop&w=800&q=80"
+    	  },
+    	  {
+    	    title: "Creating the Perfect Home Study Environment",
+    	    content: "Your learning space has a major impact on your focus. This guide walks you through setting up a distraction-free, comfortable, and inspiring study zone at home...",
+    	    author: "Karan Batra",
+    	    date: "2025-03-25",
+    	    thumbnail: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?fit=crop&w=800&q=80"
+    	  },
+    	  {
+    	    title: "The Power of Microlearning in 2025",
+    	    content: "Microlearning is gaining popularity as an efficient way to learn. Discover how bite-sized lessons can help boost retention and fit into your daily schedule...",
+    	    author: "Priya Malhotra",
+    	    date: "2025-03-20",
+    	    thumbnail: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?fit=crop&w=800&q=80"
+    	  }
+    ];
+    $scope.likePost = function(blog) {
+        alert("You liked: " + blog.title);
+      };
+  });
+</script>	
+
+
+
+<script>
+  app.controller('QuizController', function($scope) {
+    $scope.quizzes = [
+      {
+        id: 1,
+        title: 'Java Basics',
+        description: 'Test your knowledge of basic Java concepts.',
+        difficulty: 'Easy',
+        numQuestions: 10,
+        time: 15,
+        link: 'java-intro.html'
+      },
+      {
+    	    id: 2,
+    	    title: 'Introduction to Cloud Computing (ICC)',
+    	    description: 'Basics of cloud models, deployment, services and providers like AWS, Azure.',
+    	    difficulty: 'Medium',
+    	    numQuestions: 10,
+    	    time: 15,
+    	    link: 'quiz-cloud-computing.html'
+    	  },
+      {
+        id: 3,
+        title: 'Data Structures',
+        description: 'Challenge your understanding of data structures and their applications.',
+        difficulty: 'Medium',
+        numQuestions: 12,
+        time: 20,
+        link: 'quiz-data-structures.html'
+      },
+	  {
+		    id: 7,
+		    title: 'Database Management Systems',
+		    description: 'Covering SQL, ER diagrams, normalization and transaction management.',
+		    difficulty: 'Medium',
+		    numQuestions: 12,
+		    time: 18,
+		    link: 'quiz-dbms.html'
+		  },
+      {
+        id: 4,
+        title: 'Operating Systems',
+        description: 'A quiz on OS fundamentals including memory, process, and scheduling.',
+        difficulty: 'Hard',
+        numQuestions: 15,
+        time: 25,
+        link: 'quiz-operating-system.html'
+      },
+      {
+        id: 5,
+        title: 'Web Development',
+        description: 'Check your knowledge of HTML, CSS, and JavaScript basics.',
+        difficulty: 'Easy',
+        numQuestions: 8,
+        time: 10,
+        link: 'quiz-webdev.html'
+      },
+      {
+    	    id: 6,
+    	    title: 'Computer Networks',
+    	    description: 'Test your knowledge on protocols, IP addressing, layers and network devices.',
+    	    difficulty: 'Hard',
+    	    numQuestions: 14,
+    	    time: 20,
+    	    link: 'quiz-networks.html'
+    	  }
+    ];
+
+    $scope.startQuiz = function(quiz) {
+      window.location.href = quiz.link;
+    };
+  });
+</script>
+
+
+
+  <style>    /* page styleing starts */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f9fbe7);
+      overflow: auto;    /* else remove it */
+      position: relative;
+    }
+
+    /* ==== STARS ==== */
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .stars::after {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(white 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
+      animation: moveStars 100s linear infinite;
+    }
+
+    @keyframes moveStars {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100px, -200px); }
+    }
+
+    /* ==== PARTICLES ==== */
+    canvas#particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* ==== FLOATING ICONS ==== */
+    .floating-icons {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .icon {
+      font-size: 24px;
+      position: absolute;
+      color: rgba(0, 0, 0, 0.5);
+      animation: floatIcon 20s infinite ease-in-out;
+    }
+
+    .icon:nth-child(1) {
+      top: 90%; left: 10%; font-size: 28px; animation-duration: 18s;
+    }
+    .icon:nth-child(2) {
+      top: 95%; left: 35%; font-size: 32px; animation-duration: 22s;
+    }
+    .icon:nth-child(3) {
+      top: 100%; left: 60%; font-size: 26px; animation-duration: 25s;
+    }
+
+    @keyframes floatIcon {
+      0% { transform: translateY(0); opacity: 0.2; }
+      50% { transform: translateY(-50vh) scale(1.2); opacity: 0.4; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    /* ==== CONTENT ==== */
+    h1 {
+      text-align: center;
+      font-size: 2.8rem;
+      padding: 30px 20px;
+
+  background: linear-gradient(to right, #e0f7fa, #f9fbe7);
+  color: #0077cc;
+  font-weight: bold;
+      color: white;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+ nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;     /* 18 to 20*/
+  padding: 15px 20px;     /* only 20there 10i added*/
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+nav a {
+  position: relative;
+  text-decoration: none;
+  color: #0077cc;
+  background: #f0f8ff;
+  padding: 5px 18px;   /* 12,26*/
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  z-index: 0;
+  overflow: hidden;
+}
+
+nav a::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, #00bcd4, #0077cc);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  border-radius: 10px;
+}
+
+nav a:hover::before {
+  transform: scaleX(1);
+}
+
+nav a:hover {
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 119, 204, 0.2);
+}
+
+    #main-content {
+      max-width: 1100px; /* incres the body container width  */
+      margin: 50px auto;
+      padding: 40px 30px;
+      background-color: #ffffffd0;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav a {
+        width: 80%;
+        text-align: center;
+      }
+
+      #main-content {
+        margin: 30px 10px;
+        padding: 25px;
+      }
+    }
+      
+ .header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px; /* reduced padding */
+  background: linear-gradient(90deg, #e0f7fa, #f9fbe7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  flex-wrap: wrap;
+}
+
+.site-title {
+  font-size: 1.6rem; /* reduced from 2.6rem */
+  font-weight: 700;
+  padding: 10px 20px; 
+  letter-spacing: 2px;
+  color: #000; /* changed to black #000 */
+  animation: fadeInLeft 1s ease-out;
+}
+
+.site-title span {
+  color: #0077cc; /* accent color if needed */
+}
+
+.taglinee {
+  font-size: 1.3rem;
+  font-style: italic;
+  letter-spacing: 2px;
+  font-weight: 400;
+  margin: 0;
+  color: #0077cc;
+  animation: fadeInRight 1.2s ease-out;
+}
+
+/* Animations (optional) */
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .site-title {
+    font-size: 1.6rem;
+  }
+
+  .taglinee {
+    font-size: 0.95rem;
+  }
+}  /* hrader end */   
+  </style>
+  <!-- PARTICLES.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+
+    <style>
+  /* Responsive Enhancements */
+@media (max-width: 1024px) {
+  .header-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .site-title {
+    font-size: 1.8rem;
+    padding: 8px 10px;
+  }
+
+  .taglinee {
+    font-size: 1.1rem;
+  }
+
+  nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 12px;
+  }
+
+  nav a {
+    padding: 6px 14px;
+    font-size: 1rem;
+    width: auto;
+  }
+
+  #main-content {
+    margin: 40px 20px;
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .site-title {
+    font-size: 1.5rem;
+  }
+
+  .taglinee {
+    font-size: 0.9rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  nav a {
+    width: 90%;
+    padding: 10px;
+    font-size: 1rem;
+    box-shadow: none;
+  }
+
+  #main-content {
+    margin: 20px 10px;
+    padding: 20px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title {
+    font-size: 1.3rem;
+  }
+
+  .taglinee {
+    font-size: 0.85rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  #main-content {
+    padding: 15px;
+    margin: 15px 5px;
+  }
+}
+  
+  </style>
+
+
+</head>
+<body ng-app="collegeApp">
+
+  <!-- Starfield -->
+  <div class="stars"></div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particles-js"></canvas>
+
+  <!-- Floating Icons -->
+  <div class="floating-icons">
+    <div class="icon">📚</div>
+    <div class="icon">🎓</div>
+    <div class="icon">💡</div>
+  </div>
+
+<!-- <h1 class="glass-title">🎓 College Management System 📚</h1>  -->
+<div class="header-section">
+  <h1 class="site-title">E-LearnOver <span>Vidya</span></h1>
+  <p class="taglinee">Transforming Education with Technology</p>
+</div>
+
+
+  <nav>
+    <a href="#!/">Home</a>
+    <a href="#!/students">Students</a>
+    <a href="#!/courses">Courses</a>
+    <a href="#!/classroom">Classroom</a>
+    <a href="#!/quiz">Quiz</a>
+    <a href="#!/calendar">Calendar</a>
+    <a href="#!/blog">Blog</a>
+    <a href="logout.html">Logout</a>
+  </nav>
+
+  <div id="main-content" ng-view></div>
+
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 50 },
+        color: { value: "#0077cc" },
+        shape: { type: "circle" },
+        opacity: { value: 0.2 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00bcd4",
+          opacity: 0.2,
+          width: 1
+        },
+        move: { enable: true, speed: 1 }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: "grab" } },
+        modes: { grab: { distance: 140, line_linked: { opacity: 0.3 } } }
+      },
+      retina_detect: true
+    });
+  </script>
+</body>
+</html>
+
+
+
+  
+

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/*
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 32px;
+    color: #2c3e50;
+    animation: fadeInDown 0.6s ease;
+}  */
+
+.classroom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.classroom-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: fadeInUp 0.6s ease;
+}
+
+.classroom-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.classroom-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.classroom-title i {
+    font-size: 20px;
+    color: #3498db;
+}
+
+.classroom-info {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.progress-bar-container {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 12px;
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    width: {{c.progress}}%;
+    transition: width 0.6s ease-in-out;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.continue-btn, .open-btn, .unenroll-btn {
+    flex: 1;
+    padding: 5px 14px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.continue-btn {
+    background-color: #d4edda; /* Light green background */
+    color: #155724;            /* Deep green text */
+    border: 1px solid #c3e6cb;
+}
+
+.continue-btn:hover {
+    background-color: #c3e6cb;
+    transform: translateY(-2px);
+}
+
+.open-btn {
+    background-color: #d6e0f5; /* Light indigo/blue */
+    color: #1b2e63;
+    border: 1px solid #c0d3f5;
+}
+
+.open-btn:hover {
+    background-color: #c0d3f5;
+    transform: translateY(-2px);
+}
+
+.unenroll-btn {
+    background-color: #f8d7da; /* Light pink/red */
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.unenroll-btn:hover {
+    background-color: #f5c6cb;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+<style type="text/css">
+.tagline {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #6c757d;
+    opacity: 0;
+    animation: fadeInTagline 1.2s ease forwards;
+}
+
+/* Tagline Animation */
+@keyframes fadeInTagline {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!--  <div ng-app="classApp" ng-controller="ClassroomController">  
+    <h2>Classroom Table</h2>
+    <table border="1">
+        <tr>
+            <th>Room ID</th>
+            <th>Course ID</th>
+            <th>Course Name</th>
+        </tr>
+        <tr ng-repeat="c in classrooms">
+            <td>{{ c.r_id }}</td>
+            <td>{{ c.course_id }}</td>
+            <td>{{ c.course_name }}</td>
+        </tr>
+    </table>
+  </div> 
+   -->
+
+<h2>Your Enrolled Classes </h2>
+
+<div class="classroom-grid">
+    <div class="classroom-card" ng-repeat="c in classrooms">
+        <div class="classroom-title">
+            <i class="fas fa-book"></i> {{ c.course_name }}
+        </div>
+        <div class="classroom-info">
+            Room ID: {{ c.r_id }}<br>
+            Course ID: {{ c.course_id }}
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" style="width: {{c.progress}}%;"></div>
+        </div>
+        <div class="action-buttons">
+        <!-- <button class="continue-btn" ng-click="continueClassroom(c.r_id)">Continue</button>
+            <button class="open-btn" ng-click="openClassroom(c.r_id)">Open Class</button>
+            <button class="unenroll-btn">Unenroll</button>  -->
+            <button class="continue-btn"><i class="fas fa-play-circle"></i> Continue</button>
+			<button class="open-btn"><i class="fas fa-door-open"></i> Open</button>
+			<button class="unenroll-btn"><i class="fas fa-times-circle"></i> Unenroll</button>
+            
+            
+        </div>
+    </div>
+</div>
+
+<div class="tagline">Learn Something New Every Day ---  😊  ---  Today’s Effort, Tomorrow’s Success</div>
+
+
+<script type="text/javascript">
+$scope.openClassroom = function(roomId) {
+    window.location.href = "#/classroom/" + roomId;
+};
+</script>
+
+
+
+</body>
+</html>

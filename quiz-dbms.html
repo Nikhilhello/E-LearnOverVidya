@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dbmsQuizApp">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" sizes="180x180" href="https://img.icons8.com/?size=100&id=jfx3kPtqA72k&format=png&color=000000" />
+  <title>DBMS Quiz</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .quiz-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .question-card h2 {
+      font-size: 22px;
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .options label {
+      background-color: #f1f3f5;
+      padding: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+      font-size: 18px;
+      display: block;
+      color: #495057;
+    }
+
+    .options input[type="radio"] {
+      margin-right: 12px;
+    }
+
+    .options label:hover {
+      background-color: #dfe6e9;
+    }
+
+    .options input[type="radio"]:checked + label {
+      background-color: #a8dadc;
+    }
+
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .navigation-buttons button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 48%;
+      transition: background-color 0.3s ease;
+    }
+
+    .navigation-buttons button:disabled {
+      background-color: #b0c4de;
+      cursor: not-allowed;
+    }
+
+    #result {
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .result-feedback {
+      font-size: 18px;
+      color: #28a745;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .feedback {
+      text-align: center;
+      color: #888;
+      font-size: 16px;
+    }
+
+    .restart-btn {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .restart-btn button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .restart-btn button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body ng-controller="QuizController">
+
+  <div class="quiz-container" ng-if="!quizCompleted">
+  <center><h1>DBMS Quiz</h1></center>
+    <div class="question-card">
+      <h2>Question {{ currentQuestionIndex + 1 }} of {{ questions.length }}</h2>
+      <p>{{ currentQuestion().text }}</p>
+
+      <div class="options">
+        <label ng-repeat="option in currentQuestion().options">
+          <input type="radio" name="option" ng-model="$parent.userAnswers[currentQuestionIndex]" ng-value="option"> {{ option }}
+        </label>
+      </div>
+    </div>
+
+    <div class="navigation-buttons">
+      <button ng-click="prevQuestion()" ng-disabled="currentQuestionIndex === 0">Previous</button>
+      <button ng-click="nextQuestion()" ng-if="currentQuestionIndex < questions.length - 1">Next</button>
+      <button ng-click="submitQuiz()" ng-if="currentQuestionIndex === questions.length - 1">Submit</button>
+    </div>
+  </div>
+
+  <div id="result" ng-if="quizCompleted">
+    <p>You scored <span>{{ score }}</span> out of {{ questions.length }}!</p>
+    <p class="result-feedback" ng-if="score/questions.length >= 0.8">🎉 Excellent work! You aced this quiz!</p>
+    <p class="result-feedback" ng-if="score/questions.length >= 0.5 && score/questions.length < 0.8">👍 Well done! Keep practicing to improve further.</p>
+    <p class="result-feedback" ng-if="score/questions.length < 0.5">📝 Don’t worry, review the material and try again!</p>
+    <p class="feedback">Click below to retake the quiz or review your answers.</p>
+    <div class="restart-btn">
+      <button ng-click="restartQuiz()">Retake Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    angular.module('dbmsQuizApp', [])
+      .controller('QuizController', function($scope) {
+        $scope.questions = [
+          {
+            text: "What is the main purpose of DBMS?",
+            answer: "To manage and store data efficiently",
+            options: [
+              "To store files and documents",
+              "To manage and store data efficiently",
+              "To calculate data",
+              "To create programs"
+            ]
+          },
+          {
+            text: "Which of the following is a DBMS?",
+            answer: "MySQL",
+            options: [
+              "HTML",
+              "CSS",
+              "MySQL",
+              "Python"
+            ]
+          },
+          {
+            text: "Which SQL command is used to retrieve data from a table?",
+            answer: "SELECT",
+            options: [
+              "SELECT",
+              "INSERT",
+              "DELETE",
+              "UPDATE"
+            ]
+          },
+          {
+            text: "What does the term 'Normalization' mean in DBMS?",
+            answer: "Process of organizing data to reduce redundancy",
+            options: [
+              "Process of organizing data to reduce redundancy",
+              "Process of removing data from the database",
+              "Process of creating backups",
+              "Process of indexing data"
+            ]
+          },
+          {
+            text: "What is a primary key in a table?",
+            answer: "A unique identifier for each record in the table",
+            options: [
+              "A column used to organize the data",
+              "A unique identifier for each record in the table",
+              "A relationship between two tables",
+              "A foreign key"
+            ]
+          },
+          {
+            text: "What does 'ACID' stand for in DBMS?",
+            answer: "Atomicity, Consistency, Isolation, Durability",
+            options: [
+              "Atomicity, Consistency, Isolation, Durability",
+              "Array, Consistency, Input, Durability",
+              "Auto, Consistency, Isolation, Durability",
+              "Atomicity, Consistency, Input, Durability"
+            ]
+          },
+          {
+            text: "Which of the following is a type of relationship in a relational database?",
+            answer: "One-to-many",
+            options: [
+              "One-to-many",
+              "One-to-one",
+              "Many-to-many",
+              "All of the above"
+            ]
+          },
+          {
+            text: "What is a foreign key?",
+            answer: "A field in a table that links to the primary key of another table",
+            options: [
+              "A key used for indexing data",
+              "A key that ensures uniqueness of records",
+              "A field in a table that links to the primary key of another table",
+              "A key used to encrypt data"
+            ]
+          },
+          {
+            text: "What is the purpose of indexing in a DBMS?",
+            answer: "To speed up data retrieval",
+            options: [
+              "To ensure data integrity",
+              "To speed up data retrieval",
+              "To delete unnecessary data",
+              "To store large data"
+            ]
+          },
+          {
+            text: "What does 'DDL' stand for in SQL?",
+            answer: "Data Definition Language",
+            options: [
+              "Data Delivery Language",
+              "Data Definition Language",
+              "Data Documentation Language",
+              "Data Derivation Language"
+            ]
+          }
+        ];
+
+        $scope.currentQuestionIndex = 0;
+        $scope.userAnswers = new Array($scope.questions.length);
+        $scope.quizCompleted = false;
+        $scope.score = 0;
+
+        $scope.currentQuestion = function() {
+          return $scope.questions[$scope.currentQuestionIndex];
+        };
+
+        $scope.nextQuestion = function() {
+          if ($scope.currentQuestionIndex < $scope.questions.length - 1) {
+            $scope.currentQuestionIndex++;
+          }
+        };
+
+        $scope.prevQuestion = function() {
+          if ($scope.currentQuestionIndex > 0) {
+            $scope.currentQuestionIndex--;
+          }
+        };
+
+        $scope.submitQuiz = function() {
+          $scope.score = 0;
+          for (let i = 0; i < $scope.questions.length; i++) {
+            if ($scope.userAnswers[i] === $scope.questions[i].answer) {
+              $scope.score++;
+            }
+          }
+          $scope.quizCompleted = true;
+        };
+
+        $scope.restartQuiz = function() {
+          $scope.quizCompleted = false;
+          $scope.currentQuestionIndex = 0;
+          $scope.userAnswers = new Array($scope.questions.length);
+          $scope.score = 0;
+        };
+      });
+  </script>
+</body>
+</html>

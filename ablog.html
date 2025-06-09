@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="adminApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Blog Management</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 10px;
+}
+
+.form-card, .blog-list {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+}
+
+.form-card h2 {
+  color: #4f46e5;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form-actions button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4f46e5;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-actions button.reset {
+  background-color: #6b7280;
+}
+
+.blog-item {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 15px 0;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.blog-item:last-child {
+  border-bottom: none;
+}
+
+.blog-item img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.blog-details {
+  flex: 1;
+}
+
+.blog-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: #111827;
+}
+
+.blog-meta {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+}
+
+.blog-actions button {
+  background: none;
+  border: none;
+  color: #4f46e5;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.blog-actions button:hover {
+  text-decoration: underline;
+}
+
+.thumbnail-preview {
+  margin-top: 10px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+p {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .form-card, .blog-list {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 400px) {
+  .form-group input,
+  .form-group textarea {
+    font-size: 1rem;
+    padding: 8px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-actions button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .blog-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .blog-item img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+  </style>
+</head>
+<body ng-controller="AdminBlogController">
+
+<center> <b> <p style="font-size: 35px;">Admin Blog Management</p></b> </center>
+
+  <div class="container">
+    <!-- Blog Form -->
+    <div class="form-card">
+      <h2>{{ editingIndex === -1 ? 'Add New Blog' : 'Edit Blog' }}</h2>
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" ng-model="newBlog.title" placeholder="Enter blog title">
+      </div>
+      <div class="form-group">
+        <label>Author</label>
+        <input type="text" ng-model="newBlog.author" placeholder="Author name">
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" ng-model="newBlog.date">
+      </div>
+      <div class="form-group">
+        <label>Thumbnail URL</label>
+        <input type="text" ng-model="newBlog.thumbnail" placeholder="Image URL">
+        <img ng-if="newBlog.thumbnail" ng-src="{{newBlog.thumbnail}}" class="thumbnail-preview" alt="Thumbnail preview">
+      </div>
+      <div class="form-group">
+        <label>Content</label>
+        <textarea rows="4" ng-model="newBlog.content" placeholder="Enter blog content"></textarea>
+      </div>
+      <div class="form-actions">
+        <button ng-click="editingIndex === -1 ? addBlog() : updateBlog()">
+          {{ editingIndex === -1 ? 'Add Blog' : 'Update Blog' }}
+        </button>
+        <button class="reset" ng-click="resetForm()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Blog List -->
+    <div class="blog-list">
+      <h2>Existing Blogs</h2>
+      <div class="blog-item" ng-repeat="blog in blogs">
+        <img ng-src="{{blog.thumbnail}}" alt="thumb">
+        <div class="blog-details">
+          <div class="blog-title">{{blog.title}}</div>
+          <div class="blog-meta">{{blog.author}} | {{blog.date}}</div>
+          <div class="blog-content">{{blog.content | limitTo: 120 }}...</div>
+          <div class="blog-actions">
+            <button ng-click="editBlog($index)">✏️ Edit</button>
+            <button ng-click="deleteBlog($index)">🗑️ Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!--   <script>
+    const app = angular.module('adminBlogApp', []);
+
+    app.controller('aBlogController', function($scope) {
+      $scope.blogs = [
+        {
+          title: "Top 5 Career-Boosting Courses in 2025",
+          content: "Looking to upgrade your skills this year? We list the top five online courses that can give your career the boost it needs...",
+          author: "Mohit Verma",
+          date: "2025-04-01",
+          thumbnail: "https://images.unsplash.com/photo-1551434678-e076c223a692?fit=crop&w=800&q=80"
+        },
+        {
+          title: "Creating the Perfect Home Study Environment",
+          content: "Your learning space has a major impact on your focus. This guide walks you through setting up a distraction-free, inspiring study zone...",
+          author: "Karan Batra",
+          date: "2025-03-25",
+          thumbnail: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?fit=crop&w=800&q=80"
+        }
+      ];
+
+      $scope.newBlog = {};
+      $scope.editingIndex = -1;
+
+      $scope.addBlog = function() {
+        $scope.blogs.push(angular.copy($scope.newBlog));
+        $scope.resetForm();
+      };
+
+      $scope.editBlog = function(index) {
+        $scope.newBlog = angular.copy($scope.blogs[index]);
+        $scope.editingIndex = index;
+      };
+
+      $scope.updateBlog = function() {
+        $scope.blogs[$scope.editingIndex] = angular.copy($scope.newBlog);
+        $scope.resetForm();
+      };
+
+      $scope.deleteBlog = function(index) {
+        if (confirm("Are you sure you want to delete this blog?")) {
+          $scope.blogs.splice(index, 1);
+        }
+      };
+
+      $scope.resetForm = function() {
+        $scope.newBlog = {};
+        $scope.editingIndex = -1;
+      };
+    });
+  </script> 
+ -->
+ 
+ 
+</body>
+</html>
